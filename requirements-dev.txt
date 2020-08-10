@@ -1,3 +1,2 @@
-black==19.10b0
-flake8==3.7.9
-pre-commit==1.20.0
+flake8==3.8.3
+pre-commit==2.6.0
