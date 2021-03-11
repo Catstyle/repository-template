@@ -1,0 +1,28 @@
+stages:
+  - test
+  - deploy
+
+test:
+  image: python:3.7
+  stage: test
+  script:
+    - pip install -r requirements.txt -i http://pypi.doubanio.com/simple
+      --trusted-host pypi.doubanio.com
+    - mkdir logs
+    - pytest --cov=.
+  except:
+    - develop
+    - master
+
+deploy:
+  image: ansible-deploy:latest
+  stage: deploy
+  script:
+    - ansible-playbook
+      -e git_url=$CI_REPOSITORY_URL
+      -e name=$CI_PROJECT_NAME
+      -f 10
+      -i config/ansible/hosts
+      config/ansible/deploy-test.yml
+  only:
+    - develop
